@@ -1,5 +1,6 @@
 import { useLoginModal } from "@/hooks/useLoginModa"
 import { useRegisterModal } from "@/hooks/useRegisterModal"
+import { signIn } from "next-auth/react"
 import { useState } from "react"
 import { useCallback } from "react"
 import { toast } from "react-toastify"
@@ -25,10 +26,14 @@ export const LoginModal = ()=>{
     },[loginModal,isLoading,registerModal])
     const onsubmit  = useCallback(()=>{
         try{
-            setIsloading(true)
-            //todo need to add login logic
+            setIsloading(true)            
+            signIn('credentials',{
+                email:cEmail,
+                password
+            })
             toast.success("LoggedIn successfully")
             loginModal.onClose()
+
         }
         catch(e)
         {
@@ -38,7 +43,7 @@ export const LoginModal = ()=>{
         finally{
             setIsloading(false)
         }
-    },[loginModal,isLoading])
+    },[loginModal,isLoading,cEmail,password])
     const bodyContent = (
         <div className="flex flex-col gap-4">
             <Input

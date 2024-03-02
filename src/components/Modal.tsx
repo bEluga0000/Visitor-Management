@@ -40,7 +40,7 @@ const Modal = ({
         {
             onsubmit();
         }
-    },[])
+    },[disabled,onsubmit])
     if(!isOpen)
     {
         return null

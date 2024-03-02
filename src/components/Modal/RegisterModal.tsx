@@ -1,10 +1,12 @@
 import { useLoginModal } from "@/hooks/useLoginModa"
 import { useRegisterModal } from "@/hooks/useRegisterModal"
-import { useCallback } from "react"
+import axios from "axios"
+import { useCallback} from "react"
 import { useState } from "react"
-import { toast } from "react-toastify"
+import toast from "react-hot-toast"
 import { Input } from "../Input"
 import Modal from "../Modal"
+import {signIn} from "next-auth/react"
 
 export const RegisterModal = ()=>{
     const[cName,setCname] = useState<string>("")
@@ -13,7 +15,7 @@ export const RegisterModal = ()=>{
     const[isLoading,setIsLoading] = useState<boolean>(false)
     const registerModal = useRegisterModal();
     const LoginModal = useLoginModal();
-    const onToggle = useCallback(()=>{
+    const onToggle = useCallback(async ()=>{
         if(isLoading)
         {
             return;
@@ -24,28 +26,36 @@ export const RegisterModal = ()=>{
             LoginModal.onOpen()
 
         }
-    },[isLoading,registerModal,LoginModal])
-    const onsubmit = useCallback(()=>{
-        try{
+    },[isLoading,registerModal,LoginModal,cName])
+    const onsubmit = useCallback(async () => {
+        
+        try {
+            console.log(cName)
             setIsLoading(true)
-            // todo need to sigup logic
-            toast.success("Accont Created")
+            await axios.post('/api/worker/register', {
+                email: cMail,
+                password,
+                name: cName
+            })
+            toast.success('Accont Created')
+            signIn('credentials', {
+                email: cMail,
+                password
+            })
+
             registerModal.onCLose()
         }
-        catch(e)
-        {
-            console.error(e)
-            toast.error('Looser correct the code')
-        }
-        finally
-        {
+        catch (err) {
+            console.error(err)
+            toast.error('Something went wrong')
+        } finally {
             setIsLoading(false)
         }
-    },[registerModal])
+    }, [isLoading, registerModal, cName,cMail,password])
     const bodyContent = (
         <div className="flex flex-col gap-4">
             <Input
-                placeholder="Company Name"
+                placeholder="Name"
                 onChange={(e) => setCname(e.target.value)}
                 value={cName}
                 disabled={isLoading} />
