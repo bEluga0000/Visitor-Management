@@ -30,3 +30,10 @@ export const isLoadingState = selector({
         return state.isLoading
     }
 })
+export const roleState = selector({
+    key:"roleState",
+    get:({get})=>{
+        const state = get(userState)
+        return state.worker
+    }
+})

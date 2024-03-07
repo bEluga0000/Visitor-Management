@@ -8,12 +8,19 @@ export default async function handler(req:NextApiRequest,res:NextApiResponse){
     }
     try
     {
-        const {currentWorker} = await serverAuth(req,res)
-        res.status(200).json(currentWorker)
+        const user = await serverAuth(req,res)
+        if(user.currentWorker)
+        {
+            res.status(200).json(user.currentWorker)
+        }
+        if(user.currentGuest)
+        {
+            res.status(200).json(user.currentGuest)
+        }
     }
     catch(err)
     {
-        console.log(err)
+        // console.log(err)
         res.status(400).end()
     }
 }

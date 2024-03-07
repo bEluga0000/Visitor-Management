@@ -1,3 +1,5 @@
+import { useGuestLogModal } from "@/hooks/useGuestLogModal"
+import { useGuestRegModal } from "@/hooks/useguestRegModal"
 import { useLoginModal } from "@/hooks/useLoginModa"
 import { useRegisterModal } from "@/hooks/useRegisterModal"
 import { signIn } from "next-auth/react"
@@ -7,46 +9,43 @@ import { toast } from "react-toastify"
 import { Input } from "../Input"
 import Modal from "../Modal"
 
-export const LoginModal = ()=>{
-    const registerModal = useRegisterModal()
-    const loginModal = useLoginModal()
-    const [isLoading,setIsloading] = useState<boolean>(false)
-    const[cEmail,setCemail] = useState<string>("")
-    const[password,setPassword] = useState<string>("")
-    const onToogle = useCallback(()=>{
-        if(isLoading)
-        {
-            return ;
+export const GuestLoginModal = () => {
+    const registerModal = useGuestRegModal()
+    const loginModal = useGuestLogModal()
+    const [isLoading, setIsloading] = useState<boolean>(false)
+    const [cEmail, setCemail] = useState<string>("")
+    const [password, setPassword] = useState<string>("")
+    const onToogle = useCallback(() => {
+        if (isLoading) {
+            return;
         }
-        else
-        {
+        else {
             loginModal.onClose()
             registerModal.onOpen()
         }
-    },[loginModal,isLoading,registerModal])
-    const onsubmit  = useCallback(()=>{
-        try{
-            setIsloading(true)            
-            signIn('credentials',{
-                email:cEmail,
+    }, [loginModal, isLoading, registerModal])
+    const onsubmit = useCallback(() => {
+        try {
+            setIsloading(true)
+            signIn('credentials', {
+                email: cEmail,
                 password,
-                worker:'yes'
-            }).then((res)=>{
+                worker: 'no'
+            }).then((res) => {
                 console.log(res)
             })
             toast.success("LoggedIn successfully")
-            // loginModal.onClose()
+            loginModal.onClose()
 
         }
-        catch(e)
-        {
+        catch (e) {
             console.error(e)
             toast.error("Something went wrong")
         }
-        finally{
+        finally {
             setIsloading(false)
         }
-    },[loginModal,isLoading,cEmail,password])
+    }, [loginModal, isLoading, cEmail, password])
     const bodyContent = (
         <div className="flex flex-col gap-4">
             <Input
@@ -72,9 +71,9 @@ export const LoginModal = ()=>{
                 hover:underline" onClick={onToogle}>
                     &nbsp;Register</span></p>
         </div>
-    )    
+    )
     return <div>
         <Modal disabled={isLoading} onsubmit={onsubmit} onclose={loginModal.onClose} body={bodyContent} footer={footerContent}
-        actionLabel="Sigin" title="Welcome Back"
-        isOpen={loginModal.isOpen}></Modal></div>
+            actionLabel="Sigin" title="Welcome Back"
+            isOpen={loginModal.isOpen}></Modal></div>
 }

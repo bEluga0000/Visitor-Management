@@ -10,7 +10,7 @@ export default function handler(req:NextApiRequest,res:NextApiResponse){
     try
     {
         const {email} = req.body
-        let transporter = mailFOrmat(email)
+        let transporter = mailFOrmat()
         let message = {
             from: process.env.EMAIL_USER,
             to: email,

@@ -19,48 +19,7 @@ export const NavBar = () => {
     const username = useRecoilValue(nameState)
     const loginModal = useLoginModal()
     const registerModal = useRegisterModal()
-    useEffect(() => {
-        console.log("I am running")
-        const init = async () => {
-            console.log(username)
-            try {
-
-
-                const res = await axios.get("/api/currentUser")
-                if (!res.data) {
-                    console.log("i am running")
-                    setCurrentUser({
-                        email: null,
-                        id: null,
-                        name: null,
-                        isLoading: false
-                    })
-                }
-                else {
-                    const currentWorker = res.data
-                    setCurrentUser({
-                        email: currentWorker.email,
-                        id: currentWorker.id,
-                        name: currentWorker.name,
-                        isLoading: false
-                    })
-                    console.log(username, currentWorker)
-                }
-            }
-            catch(e)
-            {
-                console.log(e)
-                setCurrentUser({
-                    email: null,
-                    id: null,
-                    name: null,
-                    isLoading: false
-                })
-            }
-
-        }
-        init();
-    }, [])
+    
     const singUpButtonOnclick = useCallback(() => {
         if (userLoading) {
             return;
@@ -103,7 +62,8 @@ export const NavBar = () => {
                             email: null,
                             id: null,
                             isLoading: false,
-                            name: null
+                            name: null,
+                            worker:null
                         })
                         router.push("/")
                         signOut()

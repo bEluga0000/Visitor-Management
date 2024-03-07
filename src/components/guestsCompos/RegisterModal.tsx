@@ -1,4 +1,7 @@
+import { useGuestLogModal } from "@/hooks/useGuestLogModal"
 import { useGuestRegModal } from "@/hooks/useguestRegModal"
+import axios from "axios"
+import { signIn } from "next-auth/react"
 import { useCallback, useEffect } from "react"
 import { useState } from "react"
 import { toast } from "react-hot-toast"
@@ -13,7 +16,17 @@ export const GuestRegisterModal = ()=>{
     const [idImage,setIdImage] = useState("")
     const [isLoading,setIsLoading] = useState(false)
     const guestRegModal = useGuestRegModal()
-    const onSubmit = useCallback(()=>{
+    const guestLogModal = useGuestLogModal()
+    const onToogle = useCallback(() => {
+        if (isLoading) {
+            return;
+        }
+        else {
+            guestRegModal.onClose()
+            guestLogModal.onOpen()
+        }
+    }, [guestLogModal, isLoading,guestRegModal])
+    const onSubmit = useCallback(async()=>{
         if (email.length <= 1 || name.length <= 1 || password.length <= 1 || idImage.length <= 1) {
             toast.error("Please enter all the detatils")
             return;
@@ -21,7 +34,21 @@ export const GuestRegisterModal = ()=>{
         // todo need to add the guest register account
         try
         {
-            console.log("Losser u need to enter the else statment")
+            setIsLoading(true)
+            await axios.post('/api/guest/register', {
+                email,
+                password,
+                name,
+                idImage
+            })
+            toast.success('Accont Created')
+            signIn('credentials', {
+                email,
+                password,
+                worker: 'no'
+            })
+
+            guestRegModal.onClose()
         }
         catch(e)
         {
@@ -52,6 +79,17 @@ export const GuestRegisterModal = ()=>{
             <ImageUpload value={idImage} disabled={isLoading} onChange={(image) => setIdImage(image)} label="Upload profile image" />
         </div>
     )
+    const footerContent = (
+        <div>
+            <p className="
+        text-neutral-400
+        text-center
+        mt-4">Already Have accont? <span className="text-white
+                cursor-pointer
+                hover:underline" onClick={onToogle}>
+                    &nbsp;SignIn</span></p>
+        </div>
+    )
     return <div>
         <Modal disabled={isLoading}
         title="Register yourself"
@@ -59,6 +97,7 @@ export const GuestRegisterModal = ()=>{
         actionLabel="Register"
         isOpen={guestRegModal.isOpen}
         onsubmit={onSubmit}
-        body={bodyContent}/>
+        body={bodyContent}
+        footer={footerContent}/>
     </div> 
 }

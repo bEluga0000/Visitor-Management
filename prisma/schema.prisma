@@ -27,4 +27,42 @@ model Workers{
   profileImage String?
   createdAt DateTime @default(now())
   upadatedAt DateTime @updatedAt
+  hasNotification Boolean?
+  guest Boolean @default(false)
+  meetings Meeting[]
+}
+
+model Guest{
+  id String @id @default(cuid())
+  email String @unique
+  name String?
+  password String
+  image String?
+  hashedPassword String
+  bio String?
+  verified Boolean?
+  idImage String?
+  profileImage String?
+  createdAt DateTime @default(now())
+  upadatedAt DateTime @updatedAt
+  hasNotifications Boolean?
+  guest Boolean @default(true)
+  meeting Meeting[]
+}
+
+model Meeting{
+  id String @id @default(cuid())
+  host String
+  topic String?
+  date DateTime
+  guests Guest[] 
+  location String
+  parkingLocation String?
+  starttime String
+  endtime String
+  worker Workers @relation(fields: [host],references: [id],onDelete: Cascade)
+}
+model Name{
+  id String @id
+  name String
 }

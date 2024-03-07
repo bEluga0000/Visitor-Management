@@ -10,29 +10,55 @@ export const authOptions:AuthOptions={
             name:'credentials',
             credentials:{
                 email:{label:'email',type:'text'},
-                password:{label:'password',type:'password'}
+                password:{label:'password',type:'password'},
+                worker:{label:'Role',type:'text'}
             },
             async authorize(credentials)
             {
-                if(!credentials?.email||!credentials?.password)
+                if(!credentials?.email||!credentials?.password )
                 {
                     throw new Error ("Invalid Credentials")
                 }
-                const worker = await prisma?.workers.findUnique({
-                    where:{
-                        email:credentials.email
+                if (credentials.worker == 'yes')
+                {
+                    console.log("i am inside worker")
+                    const worker = await prisma?.workers.findUnique({
+                        where: {
+                            email: credentials.email
+                        }
+                    })
+                    if (!worker || !worker?.hashedPassword) {
+                        throw new Error("User not found")
                     }
-                })
-                if(!worker || !worker?.hashedPassword)
-                {
-                    throw new Error ("User not found")
+                    const isCorrectPassword = await bcrypt.compare(credentials.password, worker.hashedPassword);
+                    if (!isCorrectPassword) {
+                        throw new Error('Password not Correct')
+                    }
+                    return worker;
                 }
-                const isCorrectPassword = await bcrypt.compare(credentials.password,worker.hashedPassword);
-                if(!isCorrectPassword)
+                if (credentials.worker == 'no')
                 {
-                    throw new Error('Password not Correct')
+                    const guest = await prisma.guest.findUnique({
+                        where:{
+                            email:credentials.email
+                        }
+                    })
+                    if(!guest || !guest?.hashedPassword)
+                    {
+                        throw new Error ("Guest not found")
+                    }
+                    const isCorrectPassword = await bcrypt.compare(credentials.password,guest.hashedPassword)
+                    if(!isCorrectPassword)
+                    {
+                        throw new Error("Enter correct Password")
+                    } 
+                    return guest;
                 }
-                return worker;
+                else
+                {
+                    throw new Error("Please enter the correct Logic")
+                }
+                
             }
         })
     ],

@@ -1,5 +1,5 @@
 import nodeMailer from "nodemailer"
-export default function ({email}:{email:string})
+export default function ()
 {
     let config = {
         service: "gmail",

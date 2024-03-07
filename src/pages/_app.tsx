@@ -1,4 +1,6 @@
+import { GuestLoginModal } from "@/components/guestsCompos/LoginModal";
 import { GuestRegisterModal } from "@/components/guestsCompos/RegisterModal";
+import { Init } from "@/components/Init";
 import { LoginModal } from "@/components/Modal/LoginModal";
 import { RegisterModal } from "@/components/Modal/RegisterModal";
 import { NavBar } from "@/components/NavBar";
@@ -12,9 +14,11 @@ export default function App({ Component, pageProps }: AppProps) {
   return <RecoilRoot>
     <SessionProvider session={pageProps.sessions}>
     <Toaster/>
+    <Init/>
   <LoginModal/>
    <RegisterModal/>
   <GuestRegisterModal/>
+  <GuestLoginModal/>
    <NavBar/>
   <Component {...pageProps} />
     </SessionProvider>

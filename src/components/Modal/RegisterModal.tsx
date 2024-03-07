@@ -30,7 +30,7 @@ export const RegisterModal = ()=>{
     const onsubmit = useCallback(async () => {
         
         try {
-            console.log(cName)
+            // console.log(cName)
             setIsLoading(true)
             await axios.post('/api/worker/register', {
                 email: cMail,
@@ -40,7 +40,8 @@ export const RegisterModal = ()=>{
             toast.success('Accont Created')
             signIn('credentials', {
                 email: cMail,
-                password
+                password,
+                worker:'yes',
             })
 
             registerModal.onCLose()
