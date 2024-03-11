@@ -1,16 +1,18 @@
 import Mailgen from "mailgen";
 import generateQR from "../generateQR";
-interface meetingInvitationProps
-{
+interface meetingInvitationProps {
     // ? name
-    host:string
-    date:string
-    time:string
+    host: string
+    date: string
+    time: string
     //? try to make google link   
-    location:string
-    parking:string
-    guestId:string
-    meetingId:string
+    location: string
+    parking: string
+    guestId: string
+    meetingId: string
+    guestName: string
+    hostEmail: string
+    topic:string
 }
 export default function meetingInvitationFormat({
     host,
@@ -19,9 +21,11 @@ export default function meetingInvitationFormat({
     location,
     parking,
     guestId,
-    meetingId
-}:meetingInvitationProps)
-{
+    meetingId,
+    guestName,
+    hostEmail,
+    topic
+}: meetingInvitationProps) {
     let mailGenetor = new Mailgen({
         theme: "default",
         product: {
@@ -38,27 +42,56 @@ export default function meetingInvitationFormat({
     // Construct the Google Calendar event link
     const googleCalendarLink = `https://www.google.com/calendar/event?action=TEMPLATE&text=${encodeURIComponent(eventTitle)}&details=${encodeURIComponent(eventDescription)}&location=${encodeURIComponent(eventLocation)}&dates=${encodeURIComponent(startDate)}/${encodeURIComponent(endDate)}`;
 
-// Email content with the Google Calendar event link
+    // Email content with the Google Calendar event link
     // todo need to add the qr code base 64 string while html its going to be image src
-    const qrCode = generateQR({guestId,meetingId})
-    let response = {
-        body: {
-            name: "Company_user_Name",
-            intro: "We Warmly welcome you to our company",
-            table: {
-                data: [{
-                    googleCalender:googleCalendarLink,
-                    host,
-                    date,
-                    time,
-                    location,
-                    parking,
-                    // we are getting the qr code we need to make the image src 
-                    qrCode
-                }],
-                outro: "Heartly welcomes you"
-            }
-        }
-    }
-    return mailGenetor.generate(response)
+    const qrCode = generateQR({ guestId, meetingId })
+    // let response = {
+    //     body: {
+    //         name: `Hi ${guestName}`,
+    //         // here we going to add the meeting topic
+    //         intro: "We Warmly welcome you to our company",
+    //         action: {
+    //             instructions: 'To get started with Mailgen, please click here:',
+    //             button: {
+    //                 color: '#22BC66', // Optional action button color
+    //                 text: 'Add to calender',
+    //                 link: googleCalendarLink
+    //             }
+    //         },
+    //         // googleCalender: googleCalendarLink,
+            
+    //         host,
+    //         date,
+    //         time,
+    //         location,
+    //         parking,
+    //         // we are getting the qr code we need to make the image src 
+    //         qrCode: `<img src=${qrCode} alt = "QR Code" >`,
+    //         outro: `for any queries contact ${hostEmail}`
+    // }
+
+// }
+let response = {
+    body: {
+        name: 'Hi there!',
+        intro: `This is a reminder that your webinar "${topic}" will begin in 1 hour:`,
+        table: {
+            data: [
+                { 'Date & Time': date },
+                { 'Webinar ID': "1234" },
+            ],
+            outro: 'You can cancel your registration at any time.',
+        },
+        action: {
+            instructions: 'Add to your calendar:',
+            button: {
+                color: '#22BC66',
+                text: 'Google Calendar',
+                link: googleCalendarLink,
+            },
+        },
+        outro: `Please submit any questions to: ${hostEmail}`,
+    },
+}
+return mailGenetor.generate(response)
 }

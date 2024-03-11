@@ -1,10 +1,8 @@
 import { ShowMeeting } from "@/components/showMeeting";
-import { idState } from "@/store/selectors/userSelectors";
 import { CircularProgress } from "@mui/material";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { useRecoilValue } from "recoil";
 
 interface WorkerProps {
     name: string
@@ -23,23 +21,32 @@ interface MeetingPrpos {
 }
 const ALLMeetings = () => {
     const router = useRouter()
-    const {workerId} = router.query
+    const { guestId } = router.query
     const [meeting, setMeeting] = useState<MeetingPrpos[]>([])
-    const onSubmit = (async(id:string)=>{
-        router.push(`/meeting/${id}`)
+    const onSubmit = (async (id: string) => {
+        router.push(`/guests/meeting/${id}`)
     })
     const [isLoading, setIsLoading] = useState<boolean>(true)
+    useEffect(() => {
+        if (localStorage.getItem('userId') && !localStorage.getItem('isGuest')) {
+            router.push('/');
+        }
+        if (!localStorage.getItem('userId') || !localStorage.getItem('isGuest')) {
+            router.push('/guests');
+        }
+    }, []);
     useEffect(() => {
         console.log(meeting)
         const init = async () => {
             try {
-                const res = await axios.post("/api/meeting", {
-                    hostId: workerId
+                const res = await axios.post("/api/guest/meetings", {
+                    guestId
                 })
                 if (!res.data) {
                     throw new Error("There is no response ")
                 }
-                setMeeting(res.data)
+                setMeeting(res.data.meeting)
+                console.log(res.data)
             }
             catch (e) {
                 console.log(e)
@@ -50,15 +57,7 @@ const ALLMeetings = () => {
 
         }
         init();
-    }, [workerId])
-    useEffect(() => {
-        if (localStorage.getItem('userId') && localStorage.getItem('isGuest') == 'true') {
-            router.push('/isGuests');
-        }
-        if (!localStorage.getItem('userId') && !localStorage.getItem('isGuest')) {
-            router.push('/');
-        }
-    }, []);
+    }, [guestId])
     if (isLoading) {
         return <CircularProgress />
     }
@@ -72,7 +71,7 @@ const ALLMeetings = () => {
     return <div style={{ width: "100wh", display: "flex", flexDirection: "column" }}>
         {
             meeting.map((m) => {
-                return <ShowMeeting id={m.id} name={m.worker.name} date={m.date} topic={m.topic} onclick={()=>{onSubmit(m.id)}}/>
+                return <ShowMeeting id={m.id} name={m.worker.name} date={m.date} topic={m.topic} onclick={() => { onSubmit(m.id) }} />
             })
         }
     </div>

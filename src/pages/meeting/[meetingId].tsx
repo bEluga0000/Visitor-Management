@@ -1,7 +1,8 @@
 import { ShowGuest } from "@/components/showGuest";
 import { idState } from "@/store/selectors/userSelectors";
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, Typography } from "@mui/material";
 import axios from "axios";
+import { AlarmClock, CalendarDays, Highlighter, MapPin, ParkingCircle, User } from "lucide-react";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
@@ -33,6 +34,14 @@ const Meeting = () => {
     const [meeting, setMeeting] = useState<MeetingPrpos | null>(null)
     const [isLoading, setLoading] = useState<boolean>(true)
     const [guests, setGuests] = useState<GuestProps[]>([])
+    useEffect(() => {
+        if (localStorage.getItem('userId') && localStorage.getItem('guest')) {
+            router.push('/isGuests');
+        }
+        if (!localStorage.getItem('userId') && !localStorage.getItem('isGuest')) {
+            router.push('/');
+        }
+    }, []);
     const { meetingId } = router.query
     useEffect(() => {
         const inti = async () => {
@@ -60,36 +69,87 @@ const Meeting = () => {
     if (isLoading) {
         return <CircularProgress />
     }
-    // if(!meeting)
-    // {
-    //     router.push("/")
-    // }
-    return <div>
-        <div style={{ display: "flex", flexDirection: "column", width: "100wh" }}>
-            <h1 style={{ textAlign: "center" }}>Meeting Detals</h1>
-            <div style={{ display: 'flex', justifyContent: "space-between" }}>
-                <h2 style={{ textAlign: "center" }}>Topic:  Upcoming land Project</h2>
-                <h3 style={{ textAlign: "center" }}>Date: 20-7-2023</h3>
+    return <div style={{ minHeight: '90vh' }}>
+        <div className="flex flex-col md:flex-row" style={{minHeight:'90vh',width:'100wh',padding:'5px'}}>
+            <div className="flex flex-col w-full md:w-1/2  p-2 " style={{justifyContent:'center',alignItems:'center'}}>
+                <div style={{ padding: '2rem 3rem' ,backgroundColor:'whitesmoke'}} className="border-2 rounded-md shadow-lg">
+                <Typography variant="h4" style={{ textAlign: "center" ,paddingBottom:'1rem'}} fontWeight={600}>Meeting Details</Typography>
+                <div className="flex flex-col gap-4 mt-4" style={{textAlign:'center'}}>
+                    {/* <div className="flex justify-between"> */}
+                        {/* <Typography fontSize="lg" style={{ textAlign: "left" }}> <Highlighter style={{ display: 'inline', color: 'green' }} /></Typography> */}
+                        
+                        <Typography fontSize="lg"  style={{ textAlign: "center" }}> Upcoming land Project</Typography>
+                        <Typography fontSize="lg" >
+                            {/* <CalendarDays style={{ display: 'inline', color: 'green' }} /> */}
+                            on 20-7-2023</Typography>
+                    {/* </div> */}
+                    {/* <div className="flex justify-between"> */}
+                        <Typography fontSize="lg" className="" style={{ textAlign: "center" }}>
+                            {/* <User style={{ display: 'inline', color: 'green' }} /> */}
+                            hosted By Host Email</Typography>
+                        <Typography fontSize="lg" className="" style={{ textAlign: "center" }}>
+                            {/* <AlarmClock style={{ display: 'inline', color: 'green' }} /> */}
+                            Starts from 2:00</Typography>
+                    {/* </div> */}
+                    {/* <div className="flex justify-between"> */}
+                        <Typography fontSize="lg" className="" style={{ textAlign: "center" }}>
+                            {/* <MapPin style={{ display: 'inline', color: 'green' }} /> */}
+                            Place Google Link of the location</Typography>
+                        <Typography fontSize="lg" className="" style={{ textAlign: "center" }}>
+                            {/* <ParkingCircle style={{ display: 'inline', color: 'green' }} /> */}
+                            Allocated parking area Neat 10 </Typography>
+                    {/* </div> */}
+                </div>
+                </div>
             </div>
-            <div style={{ display: 'flex', justifyContent: "space-between" }}>
-                <h2 style={{ textAlign: "center" }}>host:  Host Email</h2>
-                <h3 style={{ textAlign: "center" }}>Time: 2:00</h3>
-            </div>
-            <div style={{ display: 'flex', justifyContent: "space-between" }}>
-                <h2 >Location:  Google Link of the location</h2>
-                <h3>Parking Allocation:Neat 10 </h3>
+
+            <div className="flex flex-col w-full md:w-1/2">
+                <Typography variant="h4" style={{ textAlign: "center" }}>Invited guest</Typography>
+                {meeting?.guests && meeting?.guests?.length > 0 && (
+                    <div className="overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300" style={{ maxHeight: '300px' }}>
+                        <div className="flex justify-between items-center p-4">
+                            <Typography fontSize="1.5rem" textAlign="center">Name</Typography>
+                            <Typography fontSize="1.5rem">Email</Typography>
+                        </div>
+                        {meeting?.guests?.map((g) => (
+                            <ShowGuest key={g.id} name={g.name} id={g.id} email={g.email} meeting={meeting} />
+                        ))}
+                    </div>
+                )}
+                {!meeting?.guests || meeting.guests.length <= 0 && (
+                    <Typography variant="subtitle1" textAlign="center">
+                        No guests are invited yet
+                    </Typography>
+                )}
             </div>
         </div>
-        <h2 style={{ textAlign: "center" }}>Invite Guests</h2>
-        {guests.map((g) => (
-            <ShowGuest name={g.name} id={g.id} email={g.email} meeting={meeting} buttonNeed/>
-        ))}
-        <h2 style={{ textAlign: "center" }}>Invited guest</h2>
+
+        
+        <div style={{height:'100vh',padding:'1rem'}}>
+        <Typography variant="h4" style={{ textAlign: "center" }}>Invite Guests</Typography>
         {
-            meeting?.guests?.map((g)=>(
-                <ShowGuest name={g.name} id={g.id} email={g.email} meeting={meeting} />
-            ))
+            
+            guests.length > 0 && <>
+                <div style={{ display: "flex", justifyContent: "space-between", gap: '3rem', alignItems: 'center',padding:'1rem'}}>
+                    <Typography fontSize={'1.5rem'} textAlign={"center"}>Name</Typography>
+                    <Typography fontSize={'1.5rem'}>Email</Typography>
+                    <Typography fontSize={'1.5rem'}>Invite</Typography>
+                </div>{
+                guests.map((g) => (
+                    <ShowGuest name={g.name} id={g.id} email={g.email} meeting={meeting} buttonNeed />
+                ))
+            }
+            </>
         }
+        {
+            guests.length <= 0 && <Typography variant="subtitle1" textAlign={'center'}>
+                you invited all the registerd guests
+            </Typography>
+        }
+        </div>
+
+        
+
     </div>
 }
 export default Meeting;

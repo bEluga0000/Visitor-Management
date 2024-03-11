@@ -8,6 +8,7 @@ interface ButtonProps{
     disabled?:boolean
     outline?:boolean
     width?:string
+    fontSize?:string
 }
 export const Button = ({
     label,
@@ -17,7 +18,8 @@ export const Button = ({
     onclick,
     disabled,
     outline,
-    width
+    width,
+    fontSize
 }:ButtonProps)=>{
     return <button disabled={disabled}
     onClick={onclick}
@@ -29,15 +31,14 @@ export const Button = ({
         hover:opacity-80
         transition
         border-2
-        ${fullWidth ? 'w-full':'w-fit'}
-        ${width ? width : fullWidth}
+        ${fullWidth ? 'w-full':width}
         ${secondary ? 'bg-lime-500':'bg-sky-500'}
         ${secondary ? 'text-black':'text-white'}
-        ${secondary ? 'border-black':'border-sky-500'}
+        ${secondary ? 'none':'border-sky-500'}
         ${large ? 'text-xl' : 'text-md'}
         ${large ? 'px-5':'px-5'}
-        ${large ? 'py-2' : 'p-y2'}
-        
+        ${large ? 'py-2' : 'py-4'}
+        ${fontSize ? 'text-' + fontSize : ''}
         ${outline ? 'border-white': ''}
     `}>
         {label}

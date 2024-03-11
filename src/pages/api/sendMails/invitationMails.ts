@@ -30,15 +30,15 @@ export default async function handler(req:NextApiRequest,res:NextApiResponse)
     }
     //todo  Need to generate qr code on the basis of the userId and meeting id after that i need send email once email sent we need to update the meeting quests part and all done
     try{
-        const { fmeeting, guestId, guestEmail }:{fmeeting:MeetingPrpos,guestId:string,guestEmail:string} = req.body
+        const { fmeeting, guestId, guestEmail,guestName }:{fmeeting:MeetingPrpos,guestId:string,guestEmail:string,guestName:string} = req.body
         const meetingId = fmeeting.id
-        const meetingInvitehtmlFormat = meetingInvitationFormat({host:"monk",date:"23:4",time:"11.15",location:"bng",parking:"b2",guestId:guestId,meetingId:fmeeting.id})
+        const meetingInvitehtmlFormat = meetingInvitationFormat({host:fmeeting.worker.name,date:fmeeting.date,time:fmeeting.starttime,location:fmeeting.location,parking:"b2",guestId:guestId,meetingId:fmeeting.id,guestName,hostEmail:"Qgmail.com",topic:fmeeting.topic})
+        // todo need to get the worker email so the guest talk with them
         let transpoter = mailFOrmat()
         let message = {
             from: process.env.EMAIL_USER,
             // need to add guest email here
             to: "shreyas302005@gmail.com",
-            subject: "We welcome you from Company_name",
             html: meetingInvitehtmlFormat
         }
         await transpoter.sendMail(message)
