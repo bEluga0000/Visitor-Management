@@ -78,15 +78,15 @@ const Meeting = () => {
                     {/* <div className="flex justify-between"> */}
                         {/* <Typography fontSize="lg" style={{ textAlign: "left" }}> <Highlighter style={{ display: 'inline', color: 'green' }} /></Typography> */}
                         
-                        <Typography fontSize="lg"  style={{ textAlign: "center" }}> Upcoming land Project</Typography>
+                        <Typography fontSize="lg"  style={{ textAlign: "center" }}> {meeting?.topic}</Typography>
                         <Typography fontSize="lg" >
                             {/* <CalendarDays style={{ display: 'inline', color: 'green' }} /> */}
-                            on 20-7-2023</Typography>
+                            on {meeting?.date}</Typography>
                     {/* </div> */}
                     {/* <div className="flex justify-between"> */}
                         <Typography fontSize="lg" className="" style={{ textAlign: "center" }}>
                             {/* <User style={{ display: 'inline', color: 'green' }} /> */}
-                            hosted By Host Email</Typography>
+                            hosted By {meeting?.worker?.name}</Typography>
                         <Typography fontSize="lg" className="" style={{ textAlign: "center" }}>
                             {/* <AlarmClock style={{ display: 'inline', color: 'green' }} /> */}
                             Starts from 2:00</Typography>
@@ -94,10 +94,10 @@ const Meeting = () => {
                     {/* <div className="flex justify-between"> */}
                         <Typography fontSize="lg" className="" style={{ textAlign: "center" }}>
                             {/* <MapPin style={{ display: 'inline', color: 'green' }} /> */}
-                            Place Google Link of the location</Typography>
+                            Place {meeting?.location}</Typography>
                         <Typography fontSize="lg" className="" style={{ textAlign: "center" }}>
                             {/* <ParkingCircle style={{ display: 'inline', color: 'green' }} /> */}
-                            Allocated parking area Neat 10 </Typography>
+                            Allocated parking area {meeting?.parkingLocation ? meeting.parkingLocation : 'Building parking area'} </Typography>
                     {/* </div> */}
                 </div>
                 </div>
