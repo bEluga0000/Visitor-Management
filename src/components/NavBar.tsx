@@ -11,7 +11,6 @@ import { useLoginModal } from "@/hooks/useLoginModa"
 import { useRegisterModal } from "@/hooks/useRegisterModal"
 import { useCallback } from "react"
 import {  Dropdown, Navbar } from 'flowbite-react';
-// import { ClipLoader } from "react-spinners"
 
 export const NavBar = () => {
     const setCurrentUser = useSetRecoilState(userState)
@@ -25,7 +24,6 @@ export const NavBar = () => {
     const singInButtonOnclick = useCallback(() => {
         loginModal.onOpen()
     }, [loginModal])
-
     if (userLoading) {
         return <CircularProgress />
     }
@@ -63,7 +61,7 @@ export const NavBar = () => {
                         label={
                             <div style={{ height: '3rem', width: '3rem', overflow: 'hidden', borderRadius: '50%' }}>
                                 <img
-                                    src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
+                                    src='/images/placeholder.png'
                                     className="h-full w-full object-cover"
                                     alt="Flowbite React Logo"
                                 />
