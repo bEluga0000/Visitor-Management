@@ -12,10 +12,10 @@ import { useRecoilValue } from "recoil";
 export default function guestHome() {
     const router = useRouter()
     const guestRegModal = useGuestRegModal()
-    const handelClick = useCallback(() => {
-        console.log("i am getting called")
-        guestRegModal.onOpen()
-    }, [guestRegModal])
+    // const handelClick = useCallback(() => {
+    //     console.log("i am getting called")
+    //     guestRegModal.onOpen()
+    // }, [guestRegModal])
     const guestId = useRecoilValue(idState)
     const isLoading = useRecoilValue(isLoadingState)
     const username = useRecoilValue(nameState)
@@ -24,11 +24,12 @@ export default function guestHome() {
     }
     return <>
         {
-            !username && <div style={{ minHeight: '90vh', textAlign: 'center', display: 'flex', flexDirection: 'column', justifyContent: "center", alignItems: 'center', backgroundColor: '#EEF0E5' }}>
-                <Typography variant="h3" fontWeight={700} fontFamily={'sans-serif'}>
+            !username && <div style={{ minHeight: '90vh', textAlign: 'center', display: 'flex', justifyContent: "center", alignItems: 'center', backgroundColor: '#EEF0E5' }} className="flex-wrap w-full">
+                <div style={{ display: 'flex', flexDirection: 'column', justifyContent: "center", alignItems: 'center', minHeight: '90vh' }} className="w-full md:w-full lg:w-1/2 xl:w-1/2">
+                <Typography variant="h4" fontWeight={700} fontFamily={'sans-serif'}>
                     Skip the queue .
                 </Typography>
-                <Typography variant="h3" fontWeight={700} fontFamily={'sans-serif'}>
+                <Typography variant="h4" fontWeight={700} fontFamily={'sans-serif'}>
                     and make waiting more enjoyable<span style={{ color: 'green' }}> by registering now </span> .
                 </Typography>
                 <div style={{ marginTop: '2rem' }}>
@@ -36,7 +37,7 @@ export default function guestHome() {
                         guestRegModal.onOpen()
                     }} outline large secondary></Button>
                 </div>
-                <div style={{ marginTop: '1rem' }}>
+                <div style={{ marginTop: '5rem' }}>
                     <Typography display={'inline'}>Emplyoee?  </Typography>
                      <a href="/" style={{
                         textDecoration: 'underline',
@@ -45,6 +46,23 @@ export default function guestHome() {
                         fontSize: '1.2rem',
                         fontWeight: 'bold'
                     }}>Login From  Here</a>
+                </div>
+                </div>
+                <div className="w-full md:w-full lg:w-1/2 xl:w-1/2 min-h-screen flex items-center justify-center text-center" style={{ minHeight: '90vh', flexDirection: 'column',paddingLeft:'.5rem' }}>
+                    <Typography variant="h2" width={'100wh'} marginBottom={'2rem'}> How it works</Typography>
+                    <ul>
+                        <div style={{ marginBottom: '1.5rem' }}>
+                        <li ><Typography textAlign={"left"} fontSize={'26px'}>1. Login/Register yourself as visitor </Typography></li>
+                        <Typography textAlign={"left"}>* Note Enter your email to check how invitation looks like</Typography>
+                        </div>
+                        <li style={{ marginBottom: '1.5rem' }}><Typography textAlign={"left"} fontSize={'26px'}>2. Invitations are going to be sent to your registerd Email by company emails</Typography></li>
+                        <li style={{ marginBottom: '1.5rem' }}><Typography textAlign={"left"} fontSize={'26px'}>4. Scan Qr code sent in the invitation get your badges and skip the Queue</Typography></li>
+                        <div>
+                        <li ><Typography textAlign={"left"} fontSize={'26px'} color={'gray'}>5. Your going to be notified as the invitation sent</Typography></li>
+                        <Typography textAlign={"left"} paddingLeft={'.2rem'}> note: We are working on this notifications</Typography>
+                        </div>
+                        
+                    </ul>
                 </div>
             </div>
         }

@@ -22,7 +22,6 @@ export const ShowMeeting = ({
     name,
     onclick
 }: ShowMeetingProps) => {
-
     const Fdate = new Date(date)
     const year = Fdate.getFullYear();
     const month = Fdate.getMonth() + 1

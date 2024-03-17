@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Notification Interface</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to bottom, #ffffff 0%, #f0f0f0 100%);
+    padding: 20px;
+    margin: 0;
+  }
+  .notification {
+    border: 1px solid #ccc;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+  .notification-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  .notification-icon {
+    font-size: 24px;
+    margin-right: 10px;
+  }
+  .notification-body {
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .pre-register-btn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 20px 0;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+  }
+
+  /* meeting invite code  */
+  /* body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+  } */ 
+  /* body thing need to be added */
+    .reminder {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    padding: 20px;
+    max-width: 300px;
+    margin: auto;
+  }
+  .reminder-header {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  .reminder-time {
+    margin-bottom: 5px;
+  }
+  .reminder-footer {
+    font-size: 14px;
+    color: #555;
+  }
+  .in-hours {
+    font-size: 14px;
+    color: #888;
+    text-align: right;
+    margin-bottom: 10px;
+  }
+</style>
+</head>
+<body>
+  <div class="notification">
+    <div class="notification-header">
+      <span class="notification-icon">🔔</span>
+      <strong>Hey, we get that you’re busy...</strong>
+    </div>
+    <div class="notification-body">
+      <p>We understand it can be hard to remember everything.</p>
+      <p>That’s why we’re here to help you out!</p>
+      <p>Pre-registering before you arrive will save you time as you avoid waiting in line.</p>
+      <p>Pre-register now</p>
+      <p>It only takes 30 seconds.</p>
+    </div>
+    <button class="pre-register-btn">Pre-Register Here</button>
+  </div>
+   <div class="reminder">
+    <div class="in-hours">IN 4 HOURS</div>
+    <div class="reminder-header">Product Roadmap Planning</div>
+    <div class="reminder-time">Fri, 14 July 2023<br>3:30PM - 4:00PM</div>
+    <div class="reminder-footer">
+      <div>Rachel</div>
+      <div>Meeting room E</div>
+      
+      <div>Tower 2, Level 7</div>
+    </div>
+  </div>
+</body>
+</html>

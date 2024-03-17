@@ -2,6 +2,7 @@ import QrCode from "qrcode"
 
 export default function generateQR({meetingId,guestId}:{guestId:string,meetingId:string})
 {
+    let src;
     let data = {
         meetingId,
         guestId
@@ -15,8 +16,9 @@ export default function generateQR({meetingId,guestId}:{guestId:string,meetingId
         else
         {
             console.log(codeDataUrl)
-            return codeDataUrl
+            src = codeDataUrl
         }
 
     })
+    return src
 }

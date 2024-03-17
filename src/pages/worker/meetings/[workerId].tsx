@@ -28,6 +28,10 @@ const ALLMeetings = () => {
     const onSubmit = (async(id:string)=>{
         router.push(`/meeting/${id}`)
     })
+    const monthArray = [
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'
+    ];
     const [isLoading, setIsLoading] = useState<boolean>(true)
     useEffect(() => {
         console.log(meeting)

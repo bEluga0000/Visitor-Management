@@ -35,6 +35,12 @@ const Meeting = () => {
     const [meeting, setMeeting] = useState<MeetingPrpos | null>(null)
     const [isLoading, setLoading] = useState<boolean>(true)
     const [guests, setGuests] = useState<GuestProps[]>([])
+    const [meetingTime,setMeetingTime] = useState("")
+    const [meetingDate,setMeetingDate] = useState("")
+    const monthArray = [
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'
+    ];
     useEffect(() => {
         if (localStorage.getItem('userId') && localStorage.getItem('guest')) {
             router.push('/isGuests');
@@ -43,7 +49,33 @@ const Meeting = () => {
             router.push('/');
         }
     }, []);
+    const [buttonLoading, setButtonLoading] = useState(false)
+    const [sent, setSent] = useState(false)
     const { meetingId } = router.query
+    const onSubmit = useCallback(async (email:string,id:string,name:string,meeting?:MeetingPrpos|null) => {
+        if (!meeting) {
+            return;
+        }
+        try {
+            setButtonLoading(true)
+            const res = await axios.post("/api/sendMails/invitationMails", {
+                guestEmail: email,
+                guestId: id,
+                guestName: name,
+                fmeeting: meeting
+            })
+            if (res.data) {
+                setSent(true)
+                toast.success("invitation succesfully")
+            }
+        } catch (e) {
+            console.log(e)
+            toast.error("Not able to send the mail")
+        }
+        finally {
+            setButtonLoading(false)
+        }
+    }, [])
     useEffect(() => {
         const inti = async () => {
             try {
@@ -52,10 +84,17 @@ const Meeting = () => {
                     throw new Error("Meeting not found")
                 }
                 setMeeting(res1.data)
+                
                 const res2 = await axios.get(`/api/guest/requiredGuests?meetingId=${meetingId}`);
                 setGuests(res2.data)
-
-
+                let date = res1.data.date.split("T")[0]
+                const monthIndex = parseInt(date.split('-')[1]) - 1;
+                let month = monthArray[monthIndex]
+                setMeetingDate(`${month} ${date.split('-')[2]} ${date.split('-')[0]}`)
+                let time = res1.data.starttime.split(':')
+                let timeHour = parseInt(time[0]) > 12 ? time[0]-12 : time[0]
+                let ampm = parseInt(time[0]) >= 12 ? 'pm' : 'am'
+                setMeetingTime(`${timeHour}.${time[1]}  ${ampm}`)
             }
             catch (e) {
                 console.log(e)
@@ -67,6 +106,7 @@ const Meeting = () => {
         }
         inti()
     }, [meetingId, hostId])
+    // const onSubmit = 
     if (isLoading) {
         return <CircularProgress />
     }
@@ -78,11 +118,11 @@ const Meeting = () => {
                     <div className="flex flex-col gap-4 mt-4" style={{ textAlign: 'center' }}>
                         <Typography fontSize="lg" style={{ textAlign: "center" }}> {meeting?.topic}</Typography>
                         <Typography fontSize="lg" >
-                            on {meeting?.date}</Typography>
+                            on {meetingDate }</Typography>
                         <Typography fontSize="lg" className="" style={{ textAlign: "center" }}>
                             hosted By {meeting?.worker?.name}</Typography>
                         <Typography fontSize="lg" className="" style={{ textAlign: "center" }}>
-                            Starts from {meeting?.starttime} </Typography>
+                            Starts from {meetingTime} </Typography>
                         <Typography fontSize="lg" className="" style={{ textAlign: "center" }}>
                             Place {meeting?.location}</Typography>
                         <Typography fontSize="lg" className="" style={{ textAlign: "center" }}>
@@ -141,8 +181,13 @@ const Meeting = () => {
                                         </p>
                                     </div>
                                     </div>
+                                    {/* //todo need to add the functionality here to send the email as we did in the show guest component */}
                                     <div style={{marginLeft:'1rem'}}>
-                                        <button>Send</button>
+                                        <button style={{ padding: '.2rem 1rem', backgroundColor: 'whitesmoke',fontWeight:'600',borderRadius:'10px'}} onClick={()=>{
+                                            onSubmit (g.email,g.id,g.name,meeting)
+
+                                        }}
+                                            disabled={sent || buttonLoading}>{sent ? "invited" : "Invite"}</button>
                                     </div>
                                 </div>
                             })}
@@ -160,7 +205,7 @@ const Meeting = () => {
         </div>
 
 
-        <div style={{ height: '100vh', padding: '1rem' }}>
+        {/* <div style={{ height: '100vh', padding: '1rem' }}>
             <Typography variant="h4" style={{ textAlign: "center" }}>Invite Guests</Typography>
             {
 
@@ -181,7 +226,7 @@ const Meeting = () => {
                     you invited all the registerd guests
                 </Typography>
             }
-        </div>
+        </div> */}
 
 
 

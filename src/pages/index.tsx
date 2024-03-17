@@ -24,11 +24,12 @@ export default function Home() {
   }
   return <>
     {
-      !username && <div style={{ minHeight: '90vh', textAlign: 'center', display: 'flex', flexDirection: 'column', justifyContent: "center", alignItems: 'center', backgroundColor:'#EEF0E5'}}>
-        <Typography variant="h2" fontWeight={700} fontFamily={'sans-serif'}>
+      !username && <div style={{ minHeight: '90vh', textAlign: 'center', display: 'flex', justifyContent: "center", alignItems: 'center', backgroundColor: '#EEF0E5' }} className="flex-wrap w-full">
+        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: "center", alignItems: 'center' ,minHeight:'90vh'}} className="w-full md:w-full lg:w-1/2 xl:w-1/2">
+        <Typography variant="h3" fontWeight={700} fontFamily={'sans-serif'}>
           Life is complicated.
         </Typography>
-        <Typography variant="h2" fontWeight={700} fontFamily={'sans-serif'}>
+        <Typography variant="h3" fontWeight={700} fontFamily={'sans-serif'}>
           Your <span style={{color:'green'}}>workplace sign in </span> shouldn't be.
         </Typography>
         <div style={{ marginTop: '1rem' }}>
@@ -36,8 +37,8 @@ export default function Home() {
             loginModal.onOpen()
           }} outline large secondary></Button>
         </div>
-        <div style={{marginTop:'1rem'}}>
-          <Typography display={'inline'}>Guest? </Typography> 
+        <div style={{marginTop:'5rem'}}>
+          <Typography display={'inline'}>Are you Visitor? </Typography> 
           <a href="/guests" style={{
             textDecoration: 'underline',
             cursor: 'pointer',
@@ -45,6 +46,17 @@ export default function Home() {
             fontSize: '1.2rem',
             fontWeight: 'bold'
           }}>Register Here</a>
+        </div>
+        </div>
+        <div className="w-full md:w-full lg:w-1/2 xl:w-1/2 min-h-screen flex items-center justify-center text-center" style={{minHeight:'90vh',flexDirection:'column'}}>
+          <Typography variant="h2" width={'100wh'} marginBottom={'2rem'}> How it works</Typography>
+          <ul>
+            <li style={{ marginBottom: '1.5rem' }}><Typography textAlign={"left"} fontSize={'26px'}>1. Login/Register yourself as Employee</Typography></li>
+            <li style={{ marginBottom: '1.5rem' }}><Typography textAlign={"left"} fontSize={'26px'}>2. Create a meeting</Typography></li>
+            <li style={{ marginBottom: '1.5rem' }}><Typography textAlign={"left"} fontSize={'26px'}>3. Send Registration links</Typography></li>
+            <li style={{ marginBottom: '1.5rem' }}><Typography textAlign={"left"} fontSize={'26px'}>4. See all  your created meeting</Typography></li>
+            <li style={{ marginBottom: '1.5rem' }}><Typography textAlign={"left"} fontSize={'26px'}>5. Send meeting invitations to registerd visitors</Typography></li>
+          </ul>
         </div>
       </div>
     }
