@@ -4,7 +4,7 @@ import QRCode from 'qrcode'
 import axios from "axios";
 import generateQR from "@/libs/generateQR";
 const Qr = () => {
-    const [src, setSrc] = useState("")
+    const [qrCode, setqrCode] = useState<null|string>("")
     // const [generate, setGenrated] = useState(false)
     // const [userId, setUserId] = useState("")
     // const [meetingId, setMeetingId] = useState("")
@@ -19,15 +19,24 @@ const Qr = () => {
     //         <button onClick={generateFunc}>Generate</button>
     //     </>
     // }
-    const qrcode = generateQR({ meetingId: "1122", guestId: "12233445" })
+    
     // setSrc(qrcode)
-    console.log(qrcode)
+    useEffect(()=>{
+        // const qr = generateQR({ meetingId: "1122", guestId: "12233445" })
+        
+        generateQR({ guestId: "12233445" , meetingId: "1122" })
+            .then(qrCode => {
+                // Use qrCode here
+                setqrCode(qrCode)
+            });
+
+    },[])
     return <>
     {/* <input type="text" placeholder="meetingId" value={meetingId} onChange={(e) => { setMeetingId(e.target.value) }} /> */}
             {/* <input type="text" placeholder="userId" value={userId} onChange={(e) => { setUserId(e.target.value) }} /> */}
             {/* <button onClick={generateFunc}>Generate</button> */}
             {
-            qrcode && <img src={qrcode} alt="" />
+            qrCode && <img src={qrCode} alt="" />
             }
         
     </>

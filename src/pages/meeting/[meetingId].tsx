@@ -49,33 +49,8 @@ const Meeting = () => {
             router.push('/');
         }
     }, []);
-    const [buttonLoading, setButtonLoading] = useState(false)
-    const [sent, setSent] = useState(false)
+
     const { meetingId } = router.query
-    const onSubmit = useCallback(async (email:string,id:string,name:string,meeting?:MeetingPrpos|null) => {
-        if (!meeting) {
-            return;
-        }
-        try {
-            setButtonLoading(true)
-            const res = await axios.post("/api/sendMails/invitationMails", {
-                guestEmail: email,
-                guestId: id,
-                guestName: name,
-                fmeeting: meeting
-            })
-            if (res.data) {
-                setSent(true)
-                toast.success("invitation succesfully")
-            }
-        } catch (e) {
-            console.log(e)
-            toast.error("Not able to send the mail")
-        }
-        finally {
-            setButtonLoading(false)
-        }
-    }, [])
     useEffect(() => {
         const inti = async () => {
             try {
@@ -169,34 +144,14 @@ const Meeting = () => {
                         </h2>
                         {guests.length > 0 && <div className="flex flex-col gap-6 mt-4">
                             {guests.map((g) => {
-                                return <div className="flex flex-row" style={{justifyContent:'space-between'}} >
-                            <div className="flex flex-row gap-4" >
-                                    <Avatar />
-                                    <div className="flex flex-col">
-                                        <p className="text-white font-semibold text-sm">
-                                            {g.name}
-                                        </p>
-                                        <p className="text-neutral-400 text-sm">
-                                            {g.email}
-                                        </p>
-                                    </div>
-                                    </div>
-                                    {/* //todo need to add the functionality here to send the email as we did in the show guest component */}
-                                    <div style={{marginLeft:'1rem'}}>
-                                        <button style={{ padding: '.2rem 1rem', backgroundColor: 'whitesmoke',fontWeight:'600',borderRadius:'10px'}} onClick={()=>{
-                                            onSubmit (g.email,g.id,g.name,meeting)
-
-                                        }}
-                                            disabled={sent || buttonLoading}>{sent ? "invited" : "Invite"}</button>
-                                    </div>
-                                </div>
+                                return <ShowGuest name={g.name} id={g.id} email={g.email} meeting={meeting}  />
                             })}
                         </div>
                         }
-                        {!meeting?.guests || meeting.guests.length <= 0 && (
+                        {guests.length <=0  && (
                             <div className="flex flex-row gap-4
                     " >
-                                No guests are invited
+                                you invited all the registerd guests
                             </div>
                         )}
                     </div>

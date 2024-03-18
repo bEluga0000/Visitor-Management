@@ -13,7 +13,7 @@ interface meetingInvitationProps {
     hostEmail: string
     topic:string
 }
-export default function meetingInvitationFormat({
+export default  function meetingInvitationFormat({
     host,
     date,
     time,
@@ -42,7 +42,14 @@ export default function meetingInvitationFormat({
 
     // Email content with the Google Calendar event link
     // todo need to add the qr code base 64 string while html its going to be image src
-    const qrCode = generateQR({ guestId, meetingId })
+    let qr;
+  generateQR({ guestId: "12233445", meetingId: "1122" })
+    .then(qrCode => {
+      // Use qrCode here
+      // setqrCode(qrCode)
+      let qr = qrCode
+    });
+  // generateAndDisplayQR();
     return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -122,8 +129,8 @@ export default function meetingInvitationFormat({
   </a>
     </div>
     <div>
-    <p>Scan the QR code at the lobby and get your badge</p>
-  <img src=${qrCode} alt="Meeting QR code">
+    <p>Scan the QR code at the lobby and get your badge ${qr}</p>
+  <img src=${qr} alt="Meeting QR code">
   </div>
   <div>
   <p>For any more queries contact ${hostEmail}</p>

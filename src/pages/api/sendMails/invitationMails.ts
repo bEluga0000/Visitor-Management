@@ -38,7 +38,7 @@ export default async function handler(req:NextApiRequest,res:NextApiResponse)
         let message = {
             from: process.env.EMAIL_USER,
             // need to add guest email here
-            to: "shreyas302005@gmail.com",
+            to: guestEmail,
             html: meetingInvitehtmlFormat
         }
         await transpoter.sendMail(message)
