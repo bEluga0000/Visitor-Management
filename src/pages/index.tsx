@@ -33,7 +33,7 @@ export default function Home() {
           Your <span style={{color:'green'}}>workplace sign in </span> shouldn't be.
         </Typography>
         <div style={{ marginTop: '1rem' }}>
-          <Button label="Sigin" onclick={() => {
+          <Button label="Signin" onclick={() => {
             loginModal.onOpen()
           }} outline large secondary></Button>
         </div>
